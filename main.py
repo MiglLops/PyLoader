@@ -33,6 +33,7 @@ def definir_local():
             conteudo.insert(0, nova_linha)
             with open(__file__, "w", encoding="utf-8") as f:
                 f.writelines(conteudo)
+    exit()
 
 
 def local_downloads():
@@ -211,3 +212,4 @@ def baixar():
 
 os.system('cls')
 baixar()
+
