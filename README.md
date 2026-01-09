@@ -19,7 +19,7 @@ INSTRUÇÕES DE USO:
 
 3.2- O programa não cria arquivos duplicados;
 
-4- Caso ocorra algum erro na parte de digitar o diretorio, exclua e execute um novo arquivo. (obs: não modifique o codigo, ele pode quebrar);
+4- ~Caso ocorra algum erro na parte de digitar o diretorio, exclua e execute um novo arquivo. (obs: não modifique o codigo, ele pode quebrar);~
 
 5- Os downloads via Instagram ficarão na mesma pasta onde foi executado o codigo, por isso siga a instrução n° 2;
 
