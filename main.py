@@ -1,11 +1,10 @@
 import instaloader, os
-from pytubefix import YouTube # https://www.youtube.com/watch?v=dQw4w9WgXcQ  # https://youtu.be/VlCJUjEoT44?si=0RlOCcQCdW805qWH   # https://youtube.com/playlist?list=PLTP0-W-US2Svy_jW2V61s6RhDXioHJrSu
-from pytubefix.cli import on_progress, Playlist  # https://www.instagram.com/reel/DOqLVVVCnIQ/?id=3722837886497354256_48594204151
+from pytubefix import YouTube 
+from pytubefix.cli import on_progress, Playlist
 
 n = 0
 substring_ig, substring_pl = "instagram", "playlist"
 substring_yt = "youtu"
-lista_titulo, lista_url = [], []
 
 L = instaloader.Instaloader(
     download_comments=False,
@@ -14,6 +13,39 @@ L = instaloader.Instaloader(
     post_metadata_txt_pattern="",
     download_video_thumbnails=False
 )
+
+
+def definir_local(): # codigo velho podre que funciona e esta sendo reutilizado
+    global local_salvo2, conteudo, local
+
+    with open(__file__, "r", encoding="utf-8") as f:
+        conteudo = f.readlines()
+        if remover == True:
+            local_salvo2 = input("Digite o novo local de destino dos downloads: ")
+            nova_linha = f'local_salvo = r"{local_salvo2}"\n'
+            conteudo[0] = nova_linha
+            with open(__file__, "w", encoding="utf-8") as f:
+                local = True
+                f.writelines(conteudo)
+            
+        else:
+            local_salvo2 = input("Digite o local de destino dos downloads (essa ação é necessaria apenas uma vez): ")
+            nova_linha = f'local_salvo = r"{local_salvo2}"\n'
+            conteudo.insert(0, nova_linha)
+            with open(__file__, "w", encoding="utf-8") as f:
+                f.writelines(conteudo)
+    exit()
+def local_downloads():
+    global local, local_salvo
+    try:
+        if local == True:
+            print(local_salvo)
+        else:
+            definir_local()
+
+    except:
+        definir_local()
+
 
 def lista():
     global n
@@ -32,30 +64,32 @@ def download():
     os.system('cls')
     lista()
     link = "https://"
+    print(f"Local > {local_salvo}")
     print(f"Titulo dos videos/playlist >> {lista_titulo}"); print(f"URL dos videos >> {lista_url}")
-    print("Voce pode inserir mais url`s")
+    print("Voce pode inserir mais url`s\n")
     print("Digite o numero da forma de download:")
     print("1 - MP3    2 - MP4")
     escolha = input("> ")
     if link in escolha: # + urls
         url = escolha
         config()
-    elif escolha == "1": # audio
+
+    elif escolha == "1": # audio \\ obs: a ordem pra nao dar problema tem que ser essa, se trocar a ordem o codigo morre
         for i in lista_url:
             if substring_ig in i:
                 shortcode = url.split("/")[-2]
                 post = instaloader.Post.from_shortcode(L.context, shortcode)
                 print("...")
-                L.download_post(post, target="Downloads instaloader")
+                L.download_post(post, target="Instagram")
 
             elif substring_pl in i:
                 for video in pl.videos:
-                    video.streams.get_audio_only().download()
+                    video.streams.get_audio_only().download(output_path=f"{local_salvo}\YouTube\Playlist '{pl.title}' mp3")
                     print(f"{video.title} | ok\n")
 
             elif substring_yt in i:
                 video = YouTube(i, on_progress_callback=on_progress)
-                video.streams.get_audio_only().download()
+                video.streams.get_audio_only().download(output_path=f"{local_salvo}\YouTube\Audios")
                 try:
                     print(f"{video.title} | ok \n")
                 except:
@@ -67,24 +101,28 @@ def download():
                 shortcode = url.split("/")[-2]
                 post = instaloader.Post.from_shortcode(L.context, shortcode)
                 print("...")
-                L.download_post(post, target="Downloads instaloader")
+                L.download_post(post, target="Instagram")
 
             if substring_pl in i:
                 for video in pl.videos:
-                    video.streams.get_highest_resolution().download()
+                    video.streams.get_highest_resolution().download(output_path=f"{local_salvo}\YouTube\Playlist '{pl.title}' mp4")
                     print(f"{video.title} | ok\n")
 
             elif substring_yt in i:
                 video = YouTube(i, on_progress_callback=on_progress)
-                video.streams.get_highest_resolution().download()
+                video.streams.get_highest_resolution().download(output_path=f"{local_salvo}\YouTube\Videos")
                 try:
                     print(f"{video.title} | ok \n")
                 except:
                     print(f"{yt.title} | ok \n")   
 
 def config():
-    global url, yt, substring_yt, substring_pl, substring_pl, youtube, instagram, playlist, pl
+    global url, yt, substring_yt, substring_pl, substring_pl, youtube, instagram, playlist, pl, local, remover, lista_titulo, lista_url
     youtube, playlist, instagram = False, False, False
+    remover = False
+    local = True
+    lista_titulo, lista_url = [], []
+    local_downloads()
 
     if substring_pl in url:
         playlist = True
@@ -98,10 +136,40 @@ def config():
         instagram = True
         print("ig")
         download()
+    elif url == "caminho" or url == "caminho":
+        local = False
+        remover = True
+        local_downloads()
+        exit()
+
     else:
         print("insira uma url correta.")
         url = input("URL > ")
         config()
+    novamente = input("Deseja baixar novamente? s/n >> ")
+    if novamente == "n" or novamente == "N":
+        exit()
+    else:
+        os.system('cls')
+        intro()
 
-url = input("URL > ")
-config()
+
+def intro():
+    global url, remover, local
+    substring_local = ":"
+    os.system('cls')
+    try:
+        if substring_local in local_salvo:
+            print(f"Local > {local_salvo}")
+            print("caso queira modificar o caminho dos downloads digite 'caminho'") 
+        else:
+            remover = False
+            local = True
+            local_downloads()
+    except:
+        remover = False
+        local = True
+        local_downloads()
+    url = input("URL > ")
+    config()
+intro()
