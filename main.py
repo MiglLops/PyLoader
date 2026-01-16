@@ -133,8 +133,7 @@ def config():
         yt = YouTube(url)
         download()
     elif substring_ig in url:
-        instagram = True
-        print("ig")
+        instagram = True
         download()
     elif url == "caminho" or url == "caminho":
         local = False
