@@ -1,3 +1,4 @@
+local_salvo = r"D:\PyLoader"
 import instaloader, os
 from pytubefix import YouTube 
 from pytubefix.cli import on_progress, Playlist
@@ -14,6 +15,7 @@ L = instaloader.Instaloader(
     download_video_thumbnails=False
 )
 
+L.login("USUARIO", "SENHA")
 
 def definir_local(): # codigo velho podre que funciona e esta sendo reutilizado
     global local_salvo2, conteudo, local
@@ -77,7 +79,7 @@ def download():
     elif escolha == "1": # audio \\ obs: a ordem pra nao dar problema tem que ser essa, se trocar a ordem o codigo morre
         for i in lista_url:
             if substring_ig in i:
-                shortcode = url.split("/")[-2]
+                shortcode = i.split("/")[-2]
                 post = instaloader.Post.from_shortcode(L.context, shortcode)
                 print("...")
                 L.download_post(post, target="Instagram")
@@ -98,7 +100,7 @@ def download():
     elif escolha == "2": # video
         for i in lista_url:
             if substring_ig in i:
-                shortcode = url.split("/")[-2]
+                shortcode = i.split("/")[-2]
                 post = instaloader.Post.from_shortcode(L.context, shortcode)
                 print("...")
                 L.download_post(post, target="Instagram")
@@ -133,7 +135,8 @@ def config():
         yt = YouTube(url)
         download()
     elif substring_ig in url:
-        instagram = True
+        instagram = True
+        print("ig")
         download()
     elif url == "caminho" or url == "caminho":
         local = False
