@@ -1,4 +1,4 @@
-Requer download da biblioteca PYTUBEFIX e INSTALOADER ou execute o MAIN.PY 
+Requer download da biblioteca PYTUBEFIX e YT-DLP ou execute o MAIN.EXE
 
 
 LEIA AS INSTRUÇÕES ANTES DE USAR
