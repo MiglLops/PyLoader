@@ -141,6 +141,7 @@ def config():
     if novamente == "n" or novamente == "N":
         exit()
     else:
+        lista_titulo, lista_url = [], []
         os.system('cls')
         intro()
 
