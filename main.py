@@ -1,21 +1,15 @@
-local_salvo = r"D:\PyLoader"
-import instaloader, os
+import yt_dlp, os
 from pytubefix import YouTube 
 from pytubefix.cli import on_progress, Playlist
 
+lista_titulo, lista_url = [], []
 n = 0
 substring_ig, substring_pl = "instagram", "playlist"
 substring_yt = "youtu"
+ytdl_opts = {
+    "outtmpl": "%(id)s.%(ext)s",
+}  
 
-L = instaloader.Instaloader(
-    download_comments=False,
-    save_metadata=False,
-    compress_json=False,
-    post_metadata_txt_pattern="",
-    download_video_thumbnails=False
-)
-
-L.login("USUARIO", "SENHA")
 
 def definir_local(): # codigo velho podre que funciona e esta sendo reutilizado
     global local_salvo2, conteudo, local
@@ -79,10 +73,8 @@ def download():
     elif escolha == "1": # audio \\ obs: a ordem pra nao dar problema tem que ser essa, se trocar a ordem o codigo morre
         for i in lista_url:
             if substring_ig in i:
-                shortcode = i.split("/")[-2]
-                post = instaloader.Post.from_shortcode(L.context, shortcode)
-                print("...")
-                L.download_post(post, target="Instagram")
+                with yt_dlp.YoutubeDL(ytdl_opts) as ydl:
+                    ydl.download([i])
 
             elif substring_pl in i:
                 for video in pl.videos:
@@ -100,10 +92,8 @@ def download():
     elif escolha == "2": # video
         for i in lista_url:
             if substring_ig in i:
-                shortcode = i.split("/")[-2]
-                post = instaloader.Post.from_shortcode(L.context, shortcode)
-                print("...")
-                L.download_post(post, target="Instagram")
+                with yt_dlp.YoutubeDL(ytdl_opts) as ydl:
+                    ydl.download([i])
 
             if substring_pl in i:
                 for video in pl.videos:
@@ -123,7 +113,6 @@ def config():
     youtube, playlist, instagram = False, False, False
     remover = False
     local = True
-    lista_titulo, lista_url = [], []
     local_downloads()
 
     if substring_pl in url:
